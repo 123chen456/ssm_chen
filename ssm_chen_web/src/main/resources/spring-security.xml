@@ -24,9 +24,12 @@
     	<security:intercept-url pattern="/**" access="ROLE_USER,ROLE_ADMIN"/>
     	
     	<!-- 定义跳转的具体的页面 -->
+		<!--default-target-url="/index.jsp" 没有权限进行跳转-->
     	<security:form-login  
     		login-page="/login.jsp"
-    		login-processing-url="/login.do"
+    		login-processing-url="/login"
+			username-parameter="username"
+			password-parameter="password"
     		default-target-url="/index.jsp"
     		authentication-failure-url="/failer.jsp"
 			authentication-success-forward-url="/pages/main.jsp"
@@ -36,7 +39,7 @@
     	<security:csrf disabled="true"/>
     	
     	<!-- 退出 -->
-    	<security:logout invalidate-session="true" logout-url="/logout.do" logout-success-url="/login.jsp" />
+    	<security:logout invalidate-session="true" logout-url="/logout" logout-success-url="/login.jsp" />
     	
     </security:http>
     
@@ -44,7 +47,7 @@
     <security:authentication-manager>
     	<security:authentication-provider user-service-ref="userService">
     		<!-- 配置加密的方式 -->
-    		<!--<security:password-encoder ref="passwordEncoder"/>-->
+    		<security:password-encoder ref="passwordEncoder"/>
     	</security:authentication-provider>
     </security:authentication-manager>
     

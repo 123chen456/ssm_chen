@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import java.util.List;
 public class UserServiceImpl implements IUserService{
     @Autowired
     private IUserDao iUserDao;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo =null;
@@ -32,7 +35,8 @@ public class UserServiceImpl implements IUserService{
         //User是UserDetails的一个实现类
         //password 前+{noop}:告诉它我没有进行加密
         //User user = new User(userInfo.getUsername(), "{noop}"+userInfo.getPassword(), getAutority(userInfo.getRoles()));
-        User user = new User(userInfo.getUsername(), "{noop}"+userInfo.getPassword(),userInfo.getStatus()==0 ? false :true,true,true,true,getAutority(userInfo.getRoles()));
+        //User user = new User(userInfo.getUsername(), "{noop}"+userInfo.getPassword(),userInfo.getStatus()==0 ? false :true,true,true,true,getAutority(userInfo.getRoles()));
+        User user = new User(userInfo.getUsername(), userInfo.getPassword(),userInfo.getStatus()==0 ? false :true,true,true,true,getAutority(userInfo.getRoles()));
         return user;
     }
     //封装用户描述
@@ -44,5 +48,59 @@ public class UserServiceImpl implements IUserService{
             System.out.println("ROLE_"+roleName);//ROLE_ADMIN
         }
         return list;
+    }
+
+    @Override
+    public List<UserInfo> findAll() {
+        List<UserInfo> list=null;
+        try {
+            list=iUserDao.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    //保存用户
+    @Override
+    public void save(UserInfo userInfo) {
+        userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+        try {
+            iUserDao.save(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public UserInfo findById(String id) {
+        UserInfo userInfo=null;
+        try{
+            userInfo= iUserDao.findById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return userInfo;
+    }
+
+    @Override
+    public List<Role> findOtherRoles(String id) {
+        List<Role> list=null;
+        try{
+            list=iUserDao.findOtherRoles(id);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public void addRoleToUser(String userID,String[] ids) {
+        for (String id : ids) {
+            System.out.println(id);
+            if (id!=null){
+                iUserDao.addRoleToUser(userID,id);
+            }
+        }
+
     }
 }

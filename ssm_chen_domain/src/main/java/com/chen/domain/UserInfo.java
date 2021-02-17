@@ -6,6 +6,7 @@ import java.util.List;
 public class UserInfo {
     private String id;
     private String string1;
+    private String string2;
     private String username;
     private String email;
     private String password;
@@ -13,6 +14,14 @@ public class UserInfo {
     private int status;
     private String statusStr;
     private List<Role> roles;
+
+    public String getString2() {
+        return string2;
+    }
+
+    public void setString2(String string2) {
+        this.string2 = string2;
+    }
 
     public UserInfo(String string1) {
         this.string1 = string1;

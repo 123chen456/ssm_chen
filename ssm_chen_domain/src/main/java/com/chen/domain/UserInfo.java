@@ -8,6 +8,7 @@ public class UserInfo {
     private String string1;
     private String string2;
     private String string3;
+    private String string4;
     private String username;
     private String email;
     private String password;

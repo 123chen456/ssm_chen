@@ -17,6 +17,14 @@ public class UserInfo {
     private String statusStr;
     private List<Role> roles;
 
+    public String getString4() {
+        return string4;
+    }
+
+    public void setString4(String string4) {
+        this.string4 = string4;
+    }
+
     public String getString1() {
         return string1;
     }

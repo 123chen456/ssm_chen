@@ -5,6 +5,7 @@ import java.util.List;
 //与数据库中的 users对应
 public class UserInfo {
     private String id;
+    private String string1;
     private String username;
     private String email;
     private String password;
@@ -12,6 +13,10 @@ public class UserInfo {
     private int status;
     private String statusStr;
     private List<Role> roles;
+
+    public UserInfo(String string1) {
+        this.string1 = string1;
+    }
 
     public String getId() {
         return id;
